@@ -10,8 +10,13 @@ window.Y10_SEED = {
     },
     {
       id: 1002, studentIds: [0], cat: "Sports", date: "",
-      title: "School rugby team: 1st place in Bahrain",
-      desc: "One of our classmates played for the school rugby team, and the team won first place in Bahrain. We are an IGCSE class, and we are proud of them."
+      title: "Rugby Club: 1st place in Bahrain",
+      desc: "Our classmate Issy played in the school Rugby Club, and the club won first place in Bahrain. We are an IGCSE class, and we are proud of them."
+    },
+    {
+      id: 1004, studentIds: [8], cat: "Sports", date: "",
+      title: "Player of the Tournament: Issy",
+      desc: "Issy was named Player of the Tournament as the Rugby Club took first place in Bahrain."
     },
     {
       id: 1003, studentIds: [1, 2, 4], cat: "Community", date: "2026-11-04",
