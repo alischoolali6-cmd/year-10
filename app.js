@@ -1,8 +1,7 @@
 (() => {
   const KEY = "year10-data-v3"; // bumped to clear any old sample data
-  const PAL = ["#ff3d81", "#2f7bff", "#00c98d", "#ff7a1a", "#8b5cf6", "#22d3ee"];
-  const PASTEL = ["#ffe3ee", "#dfeaff", "#d6f7ea", "#ffe8d3", "#ece4ff", "#d8f6fc"];
-  const CATS = { Academic:"🎓", Sports:"🏆", Arts:"🎨", Leadership:"⭐", Community:"💚" };
+  const TONES = [["#f1dfd5","#b5573a"],["#e3e9e0","#5d7560"],["#ece3d6","#7a6246"],["#e8e1ee","#6b5a82"]];
+  const CATS = { Academic:1, Sports:1, Arts:1, Leadership:1, Community:1 };
   const NAMES = ["Abr","Danny","Adam","Ali Y","Ali G","Yusuf","Vish","Issy","Zahra","Fatima L","Fatima H","Talia","Shaikha","Ava","Mashal","Dana"];
 
   const DEFAULTS = {
@@ -32,33 +31,16 @@
   const nextId = arr => arr.reduce((m, x) => Math.max(m, x.id || 0), 0) + 1;
   const stu = id => data.students.find(s => s.id === id);
   const initials = n => n.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
-  const colorOf = id => PAL[(id - 1) % PAL.length];
-  const pastelOf = id => PASTEL[(id - 1) % PASTEL.length];
+  const toneOf = id => TONES[(id - 1) % TONES.length];
+  const avStyle = id => `--bg-a:${toneOf(id)[0]};--fg-a:${toneOf(id)[1]}`;
   const fmt = d => { try { return new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }); } catch { return d; } };
 
   let order = shuffle(data.students.map(s => s.id));   // shuffled on every visit
   let filter = "All", query = "";
 
-  /* ---------- Confetti ---------- */
-  function confetti(x = innerWidth / 2, y = innerHeight / 3, n = 70) {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    for (let i = 0; i < n; i++) {
-      const p = document.createElement("i");
-      p.className = "confetti";
-      p.style.background = PAL.concat(["#ffd21f"])[i % 7];
-      document.body.appendChild(p);
-      const ang = Math.random() * Math.PI * 2, v = 200 + Math.random() * 420;
-      const dx = Math.cos(ang) * v, dy = Math.sin(ang) * v - 300;
-      p.animate([
-        { transform: `translate(${x}px,${y}px) rotate(0)`, opacity: 1 },
-        { transform: `translate(${x + dx}px,${y + dy + 700}px) rotate(${Math.random() * 900}deg)`, opacity: 0 }
-      ], { duration: 1600 + Math.random() * 900, easing: "cubic-bezier(.2,.7,.3,1)" }).onfinish = () => p.remove();
-    }
-  }
-
   /* ---------- Render ---------- */
   function renderMarquee() {
-    const items = order.map(id => `<span>${esc(stu(id).name)}</span><span>✦</span>`).join("");
+    const items = order.map(id => `<span>${esc(stu(id).name)}</span><span>·</span>`).join("");
     $("#marquee").innerHTML = items + items;
   }
 
@@ -67,8 +49,8 @@
     const list = order.map(stu).filter(s => s && s.name.toLowerCase().includes(q));
     $("#people").innerHTML = list.map(s => {
       const n = data.achievements.filter(a => a.studentId === s.id).length;
-      return `<article class="card person" data-id="${s.id}" tabindex="0" style="--c:${colorOf(s.id)};--bg-c:${pastelOf(s.id)}">
-        <div class="avatar">${esc(s.emoji || initials(s.name))}</div>
+      return `<article class="card person" data-id="${s.id}" tabindex="0" style="${avStyle(s.id)}">
+        <div class="avatar">${esc(initials(s.name))}</div>
         <h3>${esc(s.name)}</h3>
         <div class="count">${n} achievement${n === 1 ? "" : "s"}</div></article>`;
     }).join("") || `<p class="sub">Nobody matches that search.</p>`;
@@ -78,7 +60,7 @@
   function renderHome() {
     $("#windows").innerHTML = order.map((id, i) => {
       const s = stu(id);
-      return `<div class="win" style="--i:${i}" title="${esc(s.name)}'s window"><b>${esc(s.emoji || ["🌟","🚀","🎨","⚡","🌈","🎵","🔥","🍀"][i % 8])}</b><span>${esc(s.name)}</span></div>`;
+      return `<div class="win" style="--i:${i}">${esc(s.name)}</div>`;
     }).join("");
   }
 
@@ -88,24 +70,21 @@
     const list = data.achievements.filter(a => filter === "All" || a.cat === filter).sort((a, b) => b.date.localeCompare(a.date));
     $("#achGrid").innerHTML = list.length ? list.map(a => {
       const s = stu(a.studentId);
-      return `<article class="card ach" style="--bg-c:${pastelOf(a.studentId || 1)}">
-        <div class="ico">${CATS[a.cat] || "🏅"}</div><span class="tag">${esc(a.cat)}</span>
+      return `<article class="card ach"><span class="tag">${esc(a.cat)}</span>
         <h3>${esc(a.title)}</h3><p>${esc(a.desc)}</p>
         <div class="meta">${esc(s ? s.name : "Class")} · ${fmt(a.date)}</div></article>`;
-    }).join("") : `<div class="empty"><b>Be the first on the wall! 🏆</b>Won something? Tell an admin and your name goes up here.</div>`;
+    }).join("") : `<div class="empty"><b>Be the first on the wall</b>Won something? Tell an admin and your name goes up here.</div>`;
     reveal();
   }
 
-  function renderSpot(pick) {
-    const sp = pick || data.spotlight;
+  function renderSpot() {
+    const sp = data.spotlight;
     const s = sp && stu(sp.studentId);
     $("#spot").innerHTML = s ? `
-      <div class="avatar" style="--c:${colorOf(s.id)}">${esc(s.emoji || initials(s.name))}</div>
-      <div><span class="badge">★ Star of the Month</span><h2>${esc(s.name)}</h2>
-      <p>${esc(sp.why)}</p><button class="btn" id="spinBtn">🎲 Pick a random star</button></div>`
-    : `<div class="avatar" style="--c:#ffd21f">?</div>
-      <div><span class="badge">★ Star of the Month</span><h2>Coming soon…</h2>
-      <p>An admin picks one star each month. Want a sneak peek? Spin the wheel.</p><button class="btn" id="spinBtn">🎲 Pick a random star</button></div>`;
+      <div class="avatar">${esc(initials(s.name))}</div>
+      <div><span class="badge">Star of the Month</span><h2>${esc(s.name)}</h2><p>${esc(sp.why)}</p></div>`
+    : `<div class="avatar">?</div>
+      <div><span class="badge">Star of the Month</span><h2>Coming soon</h2><p>An admin picks one star each month. Check back soon.</p></div>`;
   }
 
   function renderWall() {
@@ -115,8 +94,8 @@
     $("#toSel").innerHTML = `<option value="" disabled ${cur[1] ? "" : "selected"}>To…</option>` + opts;
     if (cur[0]) $("#fromSel").value = cur[0]; if (cur[1]) $("#toSel").value = cur[1];
     $("#wall-list").innerHTML = data.shoutouts.length ? data.shoutouts.slice().reverse().map((n, i) =>
-      `<div class="note" style="--rot:${((i * 37) % 5) - 2}deg;--bg-c:${PASTEL[i % 6]}"><div class="to">To ${esc(n.to)} 💬</div><p>${esc(n.msg)}</p><div class="from">from ${esc(n.from)}</div></div>`).join("")
-      : `<div class="empty"><b>No shout-outs yet 💌</b>Be the first to celebrate a classmate!</div>`;
+      `<div class="note"><div class="to">To ${esc(n.to)}</div><p>${esc(n.msg)}</p><div class="from">from ${esc(n.from)}</div></div>`).join("")
+      : `<div class="empty"><b>No shout-outs yet</b>Be the first to celebrate a classmate!</div>`;
   }
 
   function renderStats() {
@@ -137,31 +116,16 @@
   /* ---------- Events ---------- */
   $("#chips").addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) { filter = b.dataset.c; renderAch(); } });
   $("#search").addEventListener("input", e => { query = e.target.value; renderPeople(); });
-  $("#partyBtn").onclick = () => { confetti(innerWidth / 2, innerHeight / 2, 140); };
-  $(".door").onclick = e => { const r = e.currentTarget.getBoundingClientRect(); confetti(r.left + 45, r.top + 30, 50); };
-  $("#spot").addEventListener("click", e => {
-    if (!e.target.closest("#spinBtn")) return;
-    const s = data.students[Math.floor(Math.random() * data.students.length)];
-    renderSpot({ studentId: s.id, why: "Picked by the wheel just for fun. Everyone in Year 10 is a star! ✨" });
-    const r = $("#spot").getBoundingClientRect(); confetti(r.left + r.width / 2, Math.max(r.top, 100), 80);
-  });
 
-  // 3D tilt on cards
-  document.addEventListener("pointermove", e => {
-    const c = e.target.closest && e.target.closest(".person");
-    if (!c) return;
-    const r = c.getBoundingClientRect();
-    c.style.setProperty("--tx", ((e.clientX - r.left) / r.width - .5) * 8 + "deg");
-  }, { passive: true });
 
   const modal = $("#modal");
   function openStudent(id) {
     const s = stu(id); if (!s) return;
     const mine = data.achievements.filter(a => a.studentId === id);
-    $("#modalBody").innerHTML = `<div class="m-head"><div class="avatar" style="--c:${colorOf(id)}">${esc(s.emoji || initials(s.name))}</div>
+    $("#modalBody").innerHTML = `<div class="m-head"><div class="avatar" style="${avStyle(id)}">${esc(initials(s.name))}</div>
       <h3>${esc(s.name)}</h3>${s.dream ? `<div class="muted">Could be: ${esc(s.dream)}</div>` : ""}
       ${s.quote ? `<p class="m-quote">“${esc(s.quote)}”</p>` : ""}</div>
-      <div class="m-list">${mine.length ? mine.map(a => `<div>${CATS[a.cat] || "🏅"} <b>${esc(a.title)}</b><br><span class="muted">${fmt(a.date)}</span></div>`).join("") : `<div class="muted">No achievements yet. Their story is just starting! 🌱</div>`}</div>`;
+      <div class="m-list">${mine.length ? mine.map(a => `<div><b>${esc(a.title)}</b><br><span class="muted">${fmt(a.date)}</span></div>`).join("") : `<div class="muted">No achievements yet. Their story is just starting.</div>`}</div>`;
     modal.showModal();
   }
   $("#people").addEventListener("click", e => { const c = e.target.closest(".person"); if (c) openStudent(+c.dataset.id); });
@@ -173,7 +137,7 @@
     e.preventDefault();
     const f = new FormData(e.target);
     data.shoutouts.push({ from: f.get("from"), to: f.get("to"), msg: f.get("msg").trim() });
-    save(); e.target.reset(); renderWall(); renderStats(); confetti(innerWidth / 2, innerHeight / 2, 90);
+    save(); e.target.reset(); renderWall(); renderStats();
   });
 
   /* ---------- Admin ---------- */
@@ -201,13 +165,12 @@
     e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
     data.messages.push({ name: f.name.trim(), subject: f.subject.trim(), msg: f.msg.trim(), date: new Date().toISOString() });
     save(); e.target.reset(); $("#msgThanks").hidden = false; setTimeout(() => $("#msgThanks").hidden = true, 4000);
-    confetti(innerWidth / 2, innerHeight / 2, 60);
   });
   function renderManage() {
     $("#manage").innerHTML =
-      data.students.map(s => `<div class="rm"><span>👤 ${esc(s.name)}</span><button data-del="s" data-id="${s.id}">remove</button></div>`).join("") +
-      data.achievements.map(a => `<div class="rm"><span>🏅 ${esc(a.title)}</span><button data-del="a" data-id="${a.id}">remove</button></div>`).join("") +
-      data.shoutouts.map((n, i) => `<div class="rm"><span>💬 ${esc(n.to)}: ${esc(n.msg.slice(0, 30))}…</span><button data-del="n" data-id="${i}">remove</button></div>`).join("");
+      data.students.map(s => `<div class="rm"><span>${esc(s.name)}</span><button data-del="s" data-id="${s.id}">remove</button></div>`).join("") +
+      data.achievements.map(a => `<div class="rm"><span>${esc(a.title)}</span><button data-del="a" data-id="${a.id}">remove</button></div>`).join("") +
+      data.shoutouts.map((n, i) => `<div class="rm"><span>${esc(n.to)}: ${esc(n.msg.slice(0, 30))}…</span><button data-del="n" data-id="${i}">remove</button></div>`).join("");
   }
   function refresh() { order = shuffle(data.students.map(s => s.id)); fillSelects(); renderManage(); renderAll(); }
   const openAdmin = () => { $("#loginErr").hidden = true; $("#loginForm").reset(); $("#login").showModal(); };
@@ -226,7 +189,7 @@
   });
   $("#a-student").addEventListener("submit", e => {
     e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
-    data.students.push({ id: nextId(data.students), name: f.name.trim(), dream: f.dream.trim(), quote: f.quote.trim(), emoji: f.emoji.trim() });
+    data.students.push({ id: nextId(data.students), name: f.name.trim(), dream: f.dream.trim(), quote: f.quote.trim(), emoji: "" });
     save(); e.target.reset(); refresh();
   });
   $("#a-ach").addEventListener("submit", e => {
@@ -260,10 +223,6 @@
   $("#resetBtn").onclick = () => { if (confirm("Reset everything back to the class list?")) { data = clone(DEFAULTS); save(); refresh(); } };
 
   /* ---------- Motion flair ---------- */
-  const COLS = ["#ff3d81", "#ffd21f", "#2f7bff", "#00c98d", "#ff7a1a", "#8b5cf6", "#22d3ee", "#ff3d81"];
-  $("#title").innerHTML = "Year 10".split("").map((ch, i) =>
-    ch === " " ? `<span class="sp"></span>` : `<span class="L" style="--i:${i};color:${COLS[i]}">${ch}</span>`).join("");
-
   const words = ["leaders", "scientists", "artists", "founders", "champions", "doctors", "inventors", "legends"];
   let wi = 0, ci = 0, del = false;
   const rot = $("#rotator");
@@ -275,9 +234,6 @@
     ci += del ? -1 : 1;
     setTimeout(type, del ? 40 : 90);
   })();
-
-  $("#floaters").innerHTML = Array.from({ length: 14 }, (_, i) =>
-    `<span class="fl" style="left:${(i * 7.3 + 3) % 98}%;--s:${22 + (i * 11) % 26}px;--d:${14 + (i * 3) % 12}s;--dl:${-(i * 2.3)}s">${["⭐","🎈","✨","💛","🚀","🎨","⚡","🌈"][i % 8]}</span>`).join("");
 
   addEventListener("scroll", () => $("#nav").classList.toggle("scrolled", scrollY > 20), { passive: true });
 
