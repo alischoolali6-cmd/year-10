@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Year 10 — The Class of Who We Could Be</title>
+<meta name="description" content="The Year 10 class website: our achievements, our people, our year, and who we could become.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <a href="#top" class="logo">Y<span>10</span></a>
+  <nav>
+    <a href="#achievements">Achievements</a>
+    <a href="#class">The Class</a>
+    <a href="#spotlight">Spotlight</a>
+    <a href="#year">Our Year</a>
+    <a href="#wall">Shout-outs</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="eyebrow">Year 10 · The only class with its own website</p>
+    <h1>We are Year 10.<br>We could be <span class="rotator" id="rotator">leaders</span><span class="caret">|</span></h1>
+    <p class="lead">This is our home on the internet: everything we have achieved, everyone who makes this class what it is, and the future we are building together.</p>
+    <div class="cta">
+      <a href="#achievements" class="btn primary">See our achievements</a>
+      <a href="#class" class="btn ghost">Meet the class</a>
+    </div>
+    <div class="stats">
+      <div><b data-count="students">0</b><span>Students</span></div>
+      <div><b data-count="achievements">0</b><span>Achievements</span></div>
+      <div><b data-count="shoutouts">0</b><span>Shout-outs</span></div>
+      <div><b data-count="dreams">0</b><span>Dream careers</span></div>
+    </div>
+  </section>
+
+  <section id="achievements" class="section">
+    <h2>Hall of Achievements</h2>
+    <p class="sub">Every win counts, big or small. Tap a filter to explore.</p>
+    <div class="chips" id="chips"></div>
+    <div class="grid ach-grid" id="achGrid"></div>
+  </section>
+
+  <section id="class" class="section">
+    <h2>Meet the Class</h2>
+    <p class="sub">Click a card to see who they are and who they could become.</p>
+    <input id="search" class="search" type="search" placeholder="Search a name or dream…" aria-label="Search students">
+    <div class="grid people-grid" id="people"></div>
+  </section>
+
+  <section id="spotlight" class="section">
+    <div class="spot" id="spot"></div>
+  </section>
+
+  <section id="goals" class="section">
+    <h2>Class Goals</h2>
+    <p class="sub">What we are aiming for this year, together.</p>
+    <div class="goals" id="goals-list"></div>
+  </section>
+
+  <section id="year" class="section">
+    <h2>Our Year</h2>
+    <p class="sub">The moments that shape Year 10.</p>
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <section id="wall" class="section">
+    <h2>Shout-out Wall</h2>
+    <p class="sub">Celebrate a classmate. Say something kind. It shows up here.</p>
+    <form id="shoutForm" class="shout-form">
+      <input name="from" placeholder="Your name" maxlength="30" required>
+      <input name="to" placeholder="Shout-out to…" maxlength="30" required>
+      <textarea name="msg" placeholder="Why they are awesome…" maxlength="160" required></textarea>
+      <button class="btn primary" type="submit">Post shout-out</button>
+    </form>
+    <div class="wall" id="wall-list"></div>
+  </section>
+</main>
+
+<footer>
+  <p>Built by and for Year 10 · Who we could be starts now.</p>
+  <button class="link" id="adminBtn">Teacher login</button>
+</footer>
+
+<!-- Student modal -->
+<dialog id="modal"><div id="modalBody"></div><button class="close" id="closeModal" aria-label="Close">×</button></dialog>
+
+<!-- Admin panel -->
+<dialog id="admin">
+  <h3>Teacher panel</h3>
+  <p class="muted">Changes save in this browser. Use Export to back up or move to another device.</p>
+  <div class="tabs">
+    <button data-tab="a-student" class="on">Add student</button>
+    <button data-tab="a-ach">Add achievement</button>
+    <button data-tab="a-spot">Spotlight</button>
+    <button data-tab="a-data">Data</button>
+  </div>
+  <form id="a-student" class="tab on">
+    <input name="name" placeholder="Full name" required>
+    <input name="dream" placeholder="Dream career (e.g. Surgeon)" required>
+    <input name="quote" placeholder="Favourite quote / motto">
+    <input name="emoji" placeholder="Emoji (e.g. 🚀)" maxlength="4">
+    <button class="btn primary">Add student</button>
+  </form>
+  <form id="a-ach" class="tab">
+    <select name="student" id="achStudent" required></select>
+    <input name="title" placeholder="Achievement title" required>
+    <select name="cat"><option>Academic</option><option>Sports</option><option>Arts</option><option>Leadership</option><option>Community</option></select>
+    <input name="date" type="date" required>
+    <textarea name="desc" placeholder="Short description"></textarea>
+    <button class="btn primary">Add achievement</button>
+  </form>
+  <form id="a-spot" class="tab">
+    <select name="student" id="spotStudent" required></select>
+    <textarea name="why" placeholder="Why are they Student of the Month?" required></textarea>
+    <button class="btn primary">Set spotlight</button>
+  </form>
+  <div id="a-data" class="tab">
+    <button class="btn ghost" id="exportBtn">Export data</button>
+    <button class="btn ghost" id="importBtn">Import data</button>
+    <button class="btn ghost danger" id="resetBtn">Reset to sample data</button>
+    <hr>
+    <h4>Remove items</h4>
+    <div id="manage"></div>
+  </div>
+  <button class="close" id="closeAdmin" aria-label="Close">×</button>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
