@@ -39,7 +39,16 @@ h1{font-size:clamp(4rem,17vw,12rem);line-height:.95;font-weight:700;letter-spaci
 h1 .L{display:inline-block;animation:bounce 2.2s ease-in-out infinite;animation-delay:calc(var(--i)*.12s);text-shadow:0 .06em 0 rgba(29,27,75,.15)}
 h1 .sp{width:.3em}
 @keyframes bounce{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-.14em) rotate(-5deg)}60%{transform:translateY(0) rotate(4deg)}}
-.big{font-size:clamp(1.6rem,5vw,3rem);font-weight:600;margin-top:10px}
+.big{font-size:clamp(1.6rem,5vw,3rem);font-weight:600;margin-top:10px;line-height:1.2}
+.big+.big{margin-top:0}
+.rot-line{min-height:1.2em;white-space:nowrap;font-size:clamp(1.8rem,7.5vw,3.4rem)}
+.navAdmin{border:2px solid var(--ink);background:#fff;font:600 .9rem Fredoka;padding:5px 14px;border-radius:99px;cursor:pointer;color:var(--ink);transition:.2s}
+.navAdmin:hover{background:var(--yellow);transform:rotate(-2deg)}
+.ov{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0}
+.ov div{background:var(--bg);border:2px solid var(--ink);border-radius:14px;padding:10px;text-align:center}
+.ov b{display:block;font:700 1.8rem Fredoka}.ov span{font-size:.75rem;color:var(--muted)}
+.msg{border:2px solid var(--ink);border-radius:14px;padding:10px 14px;margin-top:8px;background:var(--bg);font-size:.9rem}
+.msg small{color:var(--muted);display:block}
 .rotator{color:var(--pink)}
 .caret{color:var(--blue);animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}

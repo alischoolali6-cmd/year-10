@@ -10,6 +10,7 @@
     achievements: [],
     spotlight: null,
     shoutouts: [],
+    messages: [],
     timeline: [
       { date:"Now",  title:"Year 10 starts here", text:"A class with its own website. Nobody else has one." },
       { date:"Soon", title:"Our first achievements", text:"Every win goes on the wall. Tell your teacher what you did!" },
@@ -26,6 +27,13 @@
 
   let data;
   try { data = JSON.parse(localStorage.getItem(KEY)) || clone(DEFAULTS); } catch { data = clone(DEFAULTS); }
+  data.messages = data.messages || [];
+  // Views on THIS device only (no backend): count once per browser session.
+  let views = 0;
+  try {
+    views = +localStorage.getItem("year10-views") || 0;
+    if (!sessionStorage.getItem("year10-counted")) { views++; localStorage.setItem("year10-views", views); sessionStorage.setItem("year10-counted", "1"); }
+  } catch {}
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {} };
   const nextId = arr => arr.reduce((m, x) => Math.max(m, x.id || 0), 0) + 1;
   const stu = id => data.students.find(s => s.id === id);
@@ -192,6 +200,26 @@
     const opts = data.students.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
     $("#achStudent").innerHTML = opts; $("#spotStudent").innerHTML = opts;
   }
+  function renderOverview() {
+    data.messages = data.messages || [];
+    $("#ovViews").textContent = views;
+    $("#ovShouts").textContent = data.shoutouts.length;
+    $("#ovMsgs").textContent = data.messages.length;
+    $("#msgList").innerHTML = data.messages.length ? data.messages.slice().reverse().map((m, i) =>
+      `<div class="msg"><b>${esc(m.subject)}</b><small>from ${esc(m.name)} · ${fmt(m.date)}</small>${esc(m.msg)}
+       <div><button class="link" data-delmsg="${data.messages.length - 1 - i}">delete</button></div></div>`).join("")
+      : `<p class="muted">No messages yet.</p>`;
+  }
+  $("#msgList").addEventListener("click", e => {
+    const b = e.target.closest("[data-delmsg]"); if (!b) return;
+    data.messages.splice(+b.dataset.delmsg, 1); save(); renderOverview();
+  });
+  $("#msgForm").addEventListener("submit", e => {
+    e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
+    data.messages.push({ name: f.name.trim(), subject: f.subject.trim(), msg: f.msg.trim(), date: new Date().toISOString() });
+    save(); e.target.reset(); $("#msgThanks").hidden = false; setTimeout(() => $("#msgThanks").hidden = true, 4000);
+    confetti(innerWidth / 2, innerHeight / 2, 60);
+  });
   function renderManage() {
     $("#manage").innerHTML =
       data.students.map(s => `<div class="rm"><span>👤 ${esc(s.name)}</span><button data-del="s" data-id="${s.id}">remove</button></div>`).join("") +
@@ -199,12 +227,14 @@
       data.shoutouts.map((n, i) => `<div class="rm"><span>💬 ${esc(n.to)}: ${esc(n.msg.slice(0, 30))}…</span><button data-del="n" data-id="${i}">remove</button></div>`).join("");
   }
   function refresh() { order = shuffle(data.students.map(s => s.id)); fillSelects(); renderManage(); renderAll(); }
-  $("#adminBtn").onclick = () => {
+  const openAdmin = () => {
     const p = prompt("Teacher passcode:");
     if (p === null) return;
     if (p !== PASS) return alert("Wrong passcode.");
-    fillSelects(); renderManage(); admin.showModal();
+    fillSelects(); renderManage(); renderOverview(); admin.showModal();
   };
+  $("#adminBtn").onclick = openAdmin;
+  $("#navAdmin").onclick = openAdmin;
   $("#closeAdmin").onclick = () => admin.close();
   $$(".tabs button").forEach(b => b.onclick = () => {
     $$(".tabs button, .tab").forEach(x => x.classList.remove("on"));

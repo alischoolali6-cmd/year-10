@@ -22,6 +22,7 @@
     <a href="#achievements">Achievements</a>
     <a href="#spotlight">Star</a>
     <a href="#wall">Shout-outs</a>
+    <button class="navAdmin" id="navAdmin">🔒 Admin</button>
   </nav>
 </header>
 
@@ -36,7 +37,8 @@
     </div>
     <p class="eyebrow">The only class with its own website 🎉</p>
     <h1 id="title" aria-label="Year 10"></h1>
-    <p class="big">We could be <span class="rotator" id="rotator">leaders</span><span class="caret">|</span></p>
+    <p class="big">We could be</p>
+    <p class="big rot-line"><span class="rotator" id="rotator">leaders</span><span class="caret">|</span></p>
     <p class="lead">Our people. Our wins. Our home. Everything Year 10 is, and everything we are about to become.</p>
     <div class="cta">
       <a href="#class" class="btn pink">Meet the class</a>
@@ -102,6 +104,18 @@
     </form>
     <div class="wall" id="wall-list"></div>
   </section>
+
+  <section id="message" class="section">
+    <h2>Message the Class</h2>
+    <p class="sub">Got an idea, a question or news for the class? Send it here. Your teacher reads these.</p>
+    <form id="msgForm" class="shout-form">
+      <input name="name" placeholder="Your name" maxlength="30" required>
+      <input name="subject" placeholder="Subject" maxlength="60" required>
+      <textarea name="msg" placeholder="Your message…" maxlength="400" required></textarea>
+      <button class="btn blue" type="submit">Send message ✉️</button>
+    </form>
+    <p class="muted" id="msgThanks" hidden>Sent! Thanks 💌</p>
+  </section>
 </main>
 
 <footer>
@@ -115,12 +129,23 @@
   <h3>Teacher panel</h3>
   <p class="muted">Changes save in this browser. Use Export to back up.</p>
   <div class="tabs">
-    <button data-tab="a-ach" class="on">Add achievement</button>
+    <button data-tab="a-over" class="on">Overview</button>
+    <button data-tab="a-ach">Add achievement</button>
     <button data-tab="a-student">Add student</button>
     <button data-tab="a-spot">Star of the month</button>
     <button data-tab="a-data">Data</button>
   </div>
-  <form id="a-ach" class="tab on">
+  <div id="a-over" class="tab on">
+    <div class="ov">
+      <div><b id="ovViews">0</b><span>Views on this device</span></div>
+      <div><b id="ovShouts">0</b><span>Shout-outs</span></div>
+      <div><b id="ovMsgs">0</b><span>Messages</span></div>
+    </div>
+    <p class="muted">These numbers only count what happened in <b>this browser</b>. Real views and messages from everyone need a shared database (Supabase), which isn't connected yet.</p>
+    <h4>Messages to the class</h4>
+    <div id="msgList"></div>
+  </div>
+  <form id="a-ach" class="tab">
     <select name="student" id="achStudent" required></select>
     <input name="title" placeholder="Achievement title" required>
     <select name="cat"><option>Academic</option><option>Sports</option><option>Arts</option><option>Leadership</option><option>Community</option></select>
