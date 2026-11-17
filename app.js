@@ -1,5 +1,5 @@
 (() => {
-  const KEY = "year10-data-v2";
+  const KEY = "year10-data-v3"; // bumped to clear any old sample data
   const PAL = ["#ff3d81", "#2f7bff", "#00c98d", "#ff7a1a", "#8b5cf6", "#22d3ee"];
   const PASTEL = ["#ffe3ee", "#dfeaff", "#d6f7ea", "#ffe8d3", "#ece4ff", "#d8f6fc"];
   const CATS = { Academic:"🎓", Sports:"🏆", Arts:"🎨", Leadership:"⭐", Community:"💚" };
@@ -11,12 +11,6 @@
     spotlight: null,
     shoutouts: [],
     messages: [],
-    timeline: [
-      { date:"Now",  title:"Year 10 starts here", text:"A class with its own website. Nobody else has one." },
-      { date:"Soon", title:"Our first achievements", text:"Every win goes on the wall. Tell your teacher what you did!" },
-      { date:"This year", title:"Building our home", text:"Room 10 is ours: we look out for each other." },
-      { date:"Next", title:"Who we could be", text:"Exams, careers, dreams. The best is still ahead." }
-    ]
   };
 
   const clone = o => JSON.parse(JSON.stringify(o));
@@ -98,7 +92,7 @@
         <div class="ico">${CATS[a.cat] || "🏅"}</div><span class="tag">${esc(a.cat)}</span>
         <h3>${esc(a.title)}</h3><p>${esc(a.desc)}</p>
         <div class="meta">${esc(s ? s.name : "Class")} · ${fmt(a.date)}</div></article>`;
-    }).join("") : `<div class="empty"><b>Be the first on the wall! 🏆</b>Won something? Tell your teacher and your name goes up here.</div>`;
+    }).join("") : `<div class="empty"><b>Be the first on the wall! 🏆</b>Won something? Tell an admin and your name goes up here.</div>`;
     reveal();
   }
 
@@ -111,12 +105,7 @@
       <p>${esc(sp.why)}</p><button class="btn" id="spinBtn">🎲 Pick a random star</button></div>`
     : `<div class="avatar" style="--c:#ffd21f">?</div>
       <div><span class="badge">★ Star of the Month</span><h2>Coming soon…</h2>
-      <p>Your teacher picks one star each month. Want a sneak peek? Spin the wheel.</p><button class="btn" id="spinBtn">🎲 Pick a random star</button></div>`;
-  }
-
-  function renderTimeline() {
-    $("#timeline").innerHTML = data.timeline.map((t, i) =>
-      `<li style="--c:${PAL[i % PAL.length]}"><em>${esc(t.date)}</em><b>${esc(t.title)}</b><p>${esc(t.text)}</p></li>`).join("");
+      <p>An admin picks one star each month. Want a sneak peek? Spin the wheel.</p><button class="btn" id="spinBtn">🎲 Pick a random star</button></div>`;
   }
 
   function renderWall() {
@@ -138,7 +127,7 @@
     });
   }
 
-  function renderAll() { renderMarquee(); renderPeople(); renderHome(); renderAch(); renderSpot(); renderTimeline(); renderWall(); renderStats(); }
+  function renderAll() { renderMarquee(); renderPeople(); renderHome(); renderAch(); renderSpot(); renderWall(); renderStats(); }
 
   function reveal() {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .08 });
@@ -195,7 +184,7 @@
 
   /* ---------- Admin ---------- */
   const admin = $("#admin");
-  const PASS = "year10teacher"; // change this to your own passcode
+  const USER = "Admin", PASS = "Admin67"; // visible in page code, so only a casual lock
   function fillSelects() {
     const opts = data.students.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
     $("#achStudent").innerHTML = opts; $("#spotStudent").innerHTML = opts;
@@ -227,12 +216,13 @@
       data.shoutouts.map((n, i) => `<div class="rm"><span>💬 ${esc(n.to)}: ${esc(n.msg.slice(0, 30))}…</span><button data-del="n" data-id="${i}">remove</button></div>`).join("");
   }
   function refresh() { order = shuffle(data.students.map(s => s.id)); fillSelects(); renderManage(); renderAll(); }
-  const openAdmin = () => {
-    const p = prompt("Teacher passcode:");
-    if (p === null) return;
-    if (p !== PASS) return alert("Wrong passcode.");
-    fillSelects(); renderManage(); renderOverview(); admin.showModal();
-  };
+  const openAdmin = () => { $("#loginErr").hidden = true; $("#loginForm").reset(); $("#login").showModal(); };
+  $("#closeLogin").onclick = () => $("#login").close();
+  $("#loginForm").addEventListener("submit", e => {
+    e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
+    if (f.user !== USER || f.pass !== PASS) { $("#loginErr").hidden = false; return; }
+    $("#login").close(); fillSelects(); renderManage(); renderOverview(); admin.showModal();
+  });
   $("#adminBtn").onclick = openAdmin;
   $("#navAdmin").onclick = openAdmin;
   $("#closeAdmin").onclick = () => admin.close();

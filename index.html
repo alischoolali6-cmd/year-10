@@ -87,12 +87,6 @@
     <div class="spot" id="spot"></div>
   </section>
 
-  <section id="year" class="section">
-    <h2>Our Year</h2>
-    <p class="sub">The road to who we could be.</p>
-    <ol class="timeline" id="timeline"></ol>
-  </section>
-
   <section id="wall" class="section">
     <h2>Shout-out Wall</h2>
     <p class="sub">Celebrate a classmate. Say something kind.</p>
@@ -107,7 +101,7 @@
 
   <section id="message" class="section">
     <h2>Message the Class</h2>
-    <p class="sub">Got an idea, a question or news for the class? Send it here. Your teacher reads these.</p>
+    <p class="sub">Got an idea, a question or news for the class? Send it here. The class admins read these.</p>
     <form id="msgForm" class="shout-form">
       <input name="name" placeholder="Your name" maxlength="30" required>
       <input name="subject" placeholder="Subject" maxlength="60" required>
@@ -120,13 +114,24 @@
 
 <footer>
   <p>Built by and for Year 10 💛 Who we could be starts now.</p>
-  <button class="link" id="adminBtn">Teacher login</button>
+  <button class="link" id="adminBtn">Student login</button>
 </footer>
 
 <dialog id="modal"><div id="modalBody"></div><button class="close" id="closeModal" aria-label="Close">×</button></dialog>
 
+<dialog id="login">
+  <h3>Student login</h3>
+  <form id="loginForm" style="display:grid;gap:10px;margin-top:14px">
+    <input name="user" placeholder="Username" autocomplete="username" required>
+    <input name="pass" type="password" placeholder="Password" autocomplete="current-password" required>
+    <p class="muted" id="loginErr" hidden style="color:var(--pink)">Wrong username or password.</p>
+    <button class="btn pink">Log in</button>
+  </form>
+  <button class="close" id="closeLogin" aria-label="Close">×</button>
+</dialog>
+
 <dialog id="admin">
-  <h3>Teacher panel</h3>
+  <h3>Admin panel</h3>
   <p class="muted">Changes save in this browser. Use Export to back up.</p>
   <div class="tabs">
     <button data-tab="a-over" class="on">Overview</button>
