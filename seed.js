@@ -20,37 +20,37 @@ window.Y10_SEED = {
     },
     {
       id: 1005, studentIds: [4], cat: "Academic", date: "",
-      title: "Highest mark in the Term 1 Business test",
+      title: "Highest mark in the Business test in Term 1",
       desc: "Top score in the Business test in Term 1."
     },
     {
       id: 1006, studentIds: [], who: "Mya", cat: "Academic", date: "",
-      title: "Highest mark in the Term 1 Psychology test",
+      title: "Highest mark in the Psychology test in Term 1",
       desc: "Top score in the Psychology test in Term 1."
     },
     {
       id: 1007, studentIds: [1], cat: "Academic", date: "",
-      title: "Highest mark in the Term 1 Maths test",
+      title: "Highest mark in the Maths test in Term 1",
       desc: "Top score in the Maths test in Term 1."
     },
     {
       id: 1008, studentIds: [2], cat: "Academic", date: "",
-      title: "Highest mark in the Term 1 English Second Language test",
+      title: "Highest mark in the English Second Language test in Term 1",
       desc: "Top score in the English Second Language test in Term 1."
     },
     {
       id: 1009, studentIds: [4], cat: "Academic", date: "",
-      title: "Highest mark in the Term 1 Arabic Second Language test",
+      title: "Highest mark in the Arabic Second Language test in Term 1",
       desc: "Top score in the Arabic Second Language test in Term 1."
     },
     {
       id: 1010, studentIds: [2], cat: "Academic", date: "",
-      title: "Highest mark in the Term 1 Geography test",
+      title: "Highest mark in the Geography test in Term 1",
       desc: "Top score in the Geography test in Term 1."
     },
     {
       id: 1011, studentIds: [1], cat: "Academic", date: "",
-      title: "Highest mark in the Term 1 Travel and Tourism test",
+      title: "Highest mark in the Travel and Tourism test in Term 1",
       desc: "Top score in the Travel and Tourism test in Term 1."
     },
     {
