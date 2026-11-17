@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin — Year 10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="adminpage">
+
+<!-- Login gate -->
+<div class="gate" id="gate">
+  <form class="gate-card" id="loginForm">
+    <a href="index.html" class="back">← Back to the class site</a>
+    <h1>Student login</h1>
+    <p class="muted">Admins only.</p>
+    <input name="user" placeholder="Username" autocomplete="username" required>
+    <input name="pass" type="password" placeholder="Password" autocomplete="current-password" required>
+    <p class="err" id="loginErr" hidden>Wrong username or password.</p>
+    <button class="btn primary">Log in</button>
+  </form>
+</div>
+
+<!-- Dashboard -->
+<div class="dash" id="dash" hidden>
+  <aside class="side">
+    <a href="index.html" class="logo">Year <span>10</span></a>
+    <p class="muted">Admin</p>
+    <nav id="sideNav">
+      <button data-p="over" class="on">Overview</button>
+      <button data-p="ach">Achievements</button>
+      <button data-p="stu">Students</button>
+      <button data-p="spot">Star of the month</button>
+      <button data-p="msg">Messages</button>
+      <button data-p="shout">Shout-outs</button>
+      <button data-p="data">Backup</button>
+    </nav>
+    <div class="side-foot">
+      <a href="index.html" class="btn ghost small">View site</a>
+      <button class="btn ghost small" id="logout">Log out</button>
+    </div>
+  </aside>
+
+  <main class="pane-wrap">
+    <section class="pane on" id="p-over">
+      <h2>Overview</h2>
+      <div class="ov">
+        <div><b id="ovViews">0</b><span>Views on this device</span></div>
+        <div><b id="ovStu">0</b><span>Students</span></div>
+        <div><b id="ovAch">0</b><span>Achievements</span></div>
+        <div><b id="ovShouts">0</b><span>Shout-outs</span></div>
+        <div><b id="ovMsgs">0</b><span>Messages</span></div>
+      </div>
+      <div class="note-box"><b>Heads up:</b> these numbers and everything you add are saved in <b>this browser only</b>. Other students on other devices will not see them until a shared database (Supabase) is connected.</div>
+    </section>
+
+    <section class="pane" id="p-ach">
+      <h2>Achievements</h2>
+      <p class="muted">Add a win for one student or for the whole class.</p>
+      <form id="achForm" class="formgrid">
+        <label>Who<select name="student" id="achWho" required></select></label>
+        <label>Type<select name="cat" id="achCat"></select></label>
+        <label class="wide">Title<input name="title" placeholder="e.g. Won the inter-school quiz" required></label>
+        <label>Date<input name="date" type="date" required></label>
+        <label class="wide">Details (optional)<textarea name="desc" placeholder="A sentence or two about what happened"></textarea></label>
+        <button class="btn primary">Add achievement</button>
+      </form>
+      <h3>All achievements</h3>
+      <div id="achList" class="list"></div>
+    </section>
+
+    <section class="pane" id="p-stu">
+      <h2>Students</h2>
+      <form id="stuForm" class="formgrid">
+        <label>Name<input name="name" required></label>
+        <label>Dream career (optional)<input name="dream"></label>
+        <label class="wide">Favourite quote (optional)<input name="quote"></label>
+        <button class="btn primary">Add student</button>
+      </form>
+      <div id="stuList" class="list"></div>
+    </section>
+
+    <section class="pane" id="p-spot">
+      <h2>Star of the month</h2>
+      <form id="spotForm" class="formgrid">
+        <label>Student<select name="student" id="spotWho" required></select></label>
+        <label class="wide">Why they are the star<textarea name="why" required></textarea></label>
+        <button class="btn primary">Set star</button>
+        <button class="btn ghost" type="button" id="clearSpot">Clear star</button>
+      </form>
+    </section>
+
+    <section class="pane" id="p-msg">
+      <h2>Messages</h2>
+      <p class="muted">Sent through "Message the Class" on this device.</p>
+      <div id="msgList" class="list"></div>
+    </section>
+
+    <section class="pane" id="p-shout">
+      <h2>Shout-outs</h2>
+      <div id="shoutList" class="list"></div>
+    </section>
+
+    <section class="pane" id="p-data">
+      <h2>Backup</h2>
+      <p class="muted">Save everything to a file, or load it back in.</p>
+      <div class="btnrow">
+        <button class="btn ghost" id="exportBtn">Export data</button>
+        <button class="btn ghost" id="importBtn">Import data</button>
+        <button class="btn ghost" id="resetBtn">Reset everything</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

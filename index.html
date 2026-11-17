@@ -2,51 +2,58 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Year 10 — Who We Could Be</title>
 <meta name="description" content="The Year 10 class website: our people, our achievements, our home.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="glow" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
-  <a href="#top" class="logo">Year 10</a>
+  <a href="#top" class="logo">Year <span>10</span></a>
   <nav>
     <a href="#class">The Class</a>
     <a href="#home">Our Home</a>
     <a href="#achievements">Achievements</a>
     <a href="#spotlight">Star</a>
     <a href="#wall">Shout-outs</a>
-    <button class="navAdmin" id="navAdmin">Admin</button>
+    <a class="navAdmin" href="admin.html">Admin</a>
   </nav>
 </header>
 
 <main id="top">
   <section class="hero">
-    <p class="eyebrow">The only class with its own website</p>
-    <h1>Year 10</h1>
-    <p class="big">We could be</p>
-    <p class="big rot-line"><span class="rotator" id="rotator">leaders</span><span class="caret">|</span></p>
-    <p class="lead">Our people, our wins and our home. Everything Year 10 is, and everything we are about to become.</p>
-    <div class="cta">
-      <a href="#class" class="btn primary">Meet the class</a>
-      <a href="#achievements" class="btn ghost">See our achievements</a>
+    <div class="hero-text">
+      <p class="eyebrow">Year 10 · Class website</p>
+      <h1>The class that<br>builds its <em>own</em><br>future.</h1>
+      <p class="big">We could be <span class="rotator" id="rotator">leaders</span><span class="caret">|</span></p>
+      <p class="lead">Our people, our wins and our home. Everything Year 10 is, and everything we are about to become.</p>
+      <div class="cta">
+        <a href="#class" class="btn primary">Meet the class</a>
+        <a href="#achievements" class="btn ghost">See our achievements</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="ring r1"></div><div class="ring r2"></div>
+      <div class="big10">10</div>
+      <div class="chipfloat c1">Leaders</div><div class="chipfloat c2">Thinkers</div><div class="chipfloat c3">Creators</div>
     </div>
   </section>
 
   <div class="marquee" aria-hidden="true"><div class="track" id="marquee"></div></div>
 
-  <div class="stats">
+  <div class="band">
     <div class="st"><b data-count="students">0</b><span>Students</span></div>
     <div class="st"><b data-count="achievements">0</b><span>Achievements</span></div>
     <div class="st"><b data-count="shoutouts">0</b><span>Shout-outs</span></div>
   </div>
 
   <section id="class" class="section">
+    <p class="kicker">01 · The Class</p>
     <h2>Meet the Class</h2>
     <p class="sub">Sixteen people, one class. Select a name to see their page.</p>
     <div class="row">
@@ -56,17 +63,19 @@
   </section>
 
   <section id="home" class="section">
-    <h2>Our Home</h2>
-    <p class="sub">Room 10 is where we learn, laugh and look out for each other. Everyone has a light on here.</p>
+    <p class="kicker">02 · Our Home</p>
+    <h2>Room 10</h2>
+    <p class="sub">Where we learn, laugh and look out for each other. Everyone has a light on here.</p>
     <div class="house">
-      <div class="house-top"><span>Room 10</span></div>
+      <div class="house-top"><span>Room 10</span><small>Year 10 · Our home</small></div>
       <div class="walls" id="windows"></div>
     </div>
   </section>
 
   <section id="achievements" class="section">
+    <p class="kicker">03 · Achievements</p>
     <h2>Hall of Achievements</h2>
-    <p class="sub">Every win counts, big or small.</p>
+    <p class="sub">Every win counts, from individual awards to things we did as a whole class.</p>
     <div class="chips" id="chips"></div>
     <div class="grid ach-grid" id="achGrid"></div>
   </section>
@@ -76,6 +85,7 @@
   </section>
 
   <section id="wall" class="section">
+    <p class="kicker">04 · Shout-outs</p>
     <h2>Shout-out Wall</h2>
     <p class="sub">Celebrate a classmate. Say something kind.</p>
     <form id="shoutForm" class="shout-form">
@@ -88,6 +98,7 @@
   </section>
 
   <section id="message" class="section">
+    <p class="kicker">05 · Contact</p>
     <h2>Message the Class</h2>
     <p class="sub">An idea, a question or some news? Send it here. The class admins read these.</p>
     <form id="msgForm" class="shout-form">
@@ -102,71 +113,10 @@
 
 <footer>
   <p>Built by and for Year 10.</p>
-  <button class="link" id="adminBtn">Student login</button>
+  <a class="link" href="admin.html">Student login</a>
 </footer>
 
 <dialog id="modal"><div id="modalBody"></div><button class="close" id="closeModal" aria-label="Close">×</button></dialog>
-
-<dialog id="login">
-  <h3>Student login</h3>
-  <form id="loginForm" style="display:grid;gap:10px;margin-top:14px">
-    <input name="user" placeholder="Username" autocomplete="username" required>
-    <input name="pass" type="password" placeholder="Password" autocomplete="current-password" required>
-    <p class="muted" id="loginErr" hidden style="color:var(--accent)">Wrong username or password.</p>
-    <button class="btn primary">Log in</button>
-  </form>
-  <button class="close" id="closeLogin" aria-label="Close">×</button>
-</dialog>
-
-<dialog id="admin">
-  <h3>Admin panel</h3>
-  <p class="muted">Changes save in this browser. Use Export to back up.</p>
-  <div class="tabs">
-    <button data-tab="a-over" class="on">Overview</button>
-    <button data-tab="a-ach">Add achievement</button>
-    <button data-tab="a-student">Add student</button>
-    <button data-tab="a-spot">Star of the month</button>
-    <button data-tab="a-data">Data</button>
-  </div>
-  <div id="a-over" class="tab on">
-    <div class="ov">
-      <div><b id="ovViews">0</b><span>Views on this device</span></div>
-      <div><b id="ovShouts">0</b><span>Shout-outs</span></div>
-      <div><b id="ovMsgs">0</b><span>Messages</span></div>
-    </div>
-    <p class="muted">These numbers only count what happened in <b>this browser</b>. Real views and messages from everyone need a shared database (Supabase), which isn't connected yet.</p>
-    <h4>Messages to the class</h4>
-    <div id="msgList"></div>
-  </div>
-  <form id="a-ach" class="tab">
-    <select name="student" id="achStudent" required></select>
-    <input name="title" placeholder="Achievement title" required>
-    <select name="cat"><option>Academic</option><option>Sports</option><option>Arts</option><option>Leadership</option><option>Community</option></select>
-    <input name="date" type="date" required>
-    <textarea name="desc" placeholder="Short description"></textarea>
-    <button class="btn primary">Add achievement</button>
-  </form>
-  <form id="a-student" class="tab">
-    <input name="name" placeholder="Name" required>
-    <input name="dream" placeholder="Dream career (optional)">
-    <input name="quote" placeholder="Favourite quote / motto (optional)">
-    <button class="btn primary">Add student</button>
-  </form>
-  <form id="a-spot" class="tab">
-    <select name="student" id="spotStudent" required></select>
-    <textarea name="why" placeholder="Why are they Star of the Month?" required></textarea>
-    <button class="btn primary">Set star</button>
-  </form>
-  <div id="a-data" class="tab">
-    <button class="btn ghost" id="exportBtn">Export data</button>
-    <button class="btn ghost" id="importBtn">Import data</button>
-    <button class="btn ghost" id="resetBtn">Reset everything</button>
-    <hr>
-    <h4>Remove items</h4>
-    <div id="manage"></div>
-  </div>
-  <button class="close" id="closeAdmin" aria-label="Close">×</button>
-</dialog>
 
 <script src="app.js"></script>
 </body>
