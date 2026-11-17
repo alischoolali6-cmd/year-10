@@ -20,38 +20,38 @@ window.Y10_SEED = {
     },
     {
       id: 1005, studentIds: [4], cat: "Academic", date: "",
-      title: "Highest mark in the Business test in Term 1",
-      desc: "Top score in the Business test in Term 1."
+      title: "Highest mark in Term 1 Business test",
+      desc: "Top score in Term 1 Business test."
     },
     {
       id: 1006, studentIds: [], who: "Mya", cat: "Academic", date: "",
-      title: "Highest mark in the Psychology test in Term 1",
-      desc: "Top score in the Psychology test in Term 1."
+      title: "Highest mark in Term 1 Psychology test",
+      desc: "Top score in Term 1 Psychology test."
     },
     {
       id: 1007, studentIds: [1], cat: "Academic", date: "",
-      title: "Highest mark in the Maths test in Term 1",
-      desc: "Top score in the Maths test in Term 1."
+      title: "Highest mark in Term 1 Maths test",
+      desc: "Top score in Term 1 Maths test."
     },
     {
       id: 1008, studentIds: [2], cat: "Academic", date: "",
-      title: "Highest mark in the English Second Language test in Term 1",
-      desc: "Top score in the English Second Language test in Term 1."
+      title: "Highest mark in Term 1 English Second Language test",
+      desc: "Top score in Term 1 English Second Language test."
     },
     {
       id: 1009, studentIds: [4], cat: "Academic", date: "",
-      title: "Highest mark in the Arabic Second Language test in Term 1",
-      desc: "Top score in the Arabic Second Language test in Term 1."
+      title: "Highest mark in Term 1 Arabic Second Language test",
+      desc: "Top score in Term 1 Arabic Second Language test."
     },
     {
       id: 1010, studentIds: [2], cat: "Academic", date: "",
-      title: "Highest mark in the Geography test in Term 1",
-      desc: "Top score in the Geography test in Term 1."
+      title: "Highest mark in Term 1 Geography test",
+      desc: "Top score in Term 1 Geography test."
     },
     {
       id: 1011, studentIds: [1], cat: "Academic", date: "",
-      title: "Highest mark in the Travel and Tourism test in Term 1",
-      desc: "Top score in the Travel and Tourism test in Term 1."
+      title: "Highest mark in Term 1 Travel and Tourism test",
+      desc: "Top score in Term 1 Travel and Tourism test."
     },
     {
       id: 1003, studentIds: [1, 2, 4], cat: "Community", date: "2026-11-04",
