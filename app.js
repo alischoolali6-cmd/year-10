@@ -29,7 +29,16 @@
   const who = id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "Class");
   const fmt = d => { try { return new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }); } catch { return d; } };
 
-  let order = shuffle(data.students.map(s => s.id));
+  // Random order, but Ali Y and Mashal are always kept well apart (never side by side or stacked).
+  function apartShuffle() {
+    const ids = data.students.map(s => s.id);
+    const a = (data.students.find(s => s.name === "Ali Y") || {}).id, b = (data.students.find(s => s.name === "Mashal") || {}).id;
+    if (!a || !b) return shuffle(ids);
+    let o;
+    for (let i = 0; i < 200; i++) { o = shuffle(ids); if (Math.abs(o.indexOf(a) - o.indexOf(b)) >= 6) break; }
+    return o;
+  }
+  let order = apartShuffle();
   let filter = "All", query = "";
 
   function renderMarquee() {
