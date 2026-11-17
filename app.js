@@ -137,12 +137,6 @@
   /* ---------- Events ---------- */
   $("#chips").addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) { filter = b.dataset.c; renderAch(); } });
   $("#search").addEventListener("input", e => { query = e.target.value; renderPeople(); });
-  $("#shuffleBtn").onclick = e => {
-    order = shuffle(order); query = ""; $("#search").value = "";
-    $("#people").style.opacity = 0;
-    setTimeout(() => { renderMarquee(); renderPeople(); renderHome(); $("#people").style.opacity = 1; }, 180);
-    const r = e.currentTarget.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top, 40);
-  };
   $("#partyBtn").onclick = () => { confetti(innerWidth / 2, innerHeight / 2, 140); };
   $(".door").onclick = e => { const r = e.currentTarget.getBoundingClientRect(); confetti(r.left + 45, r.top + 30, 50); };
   $("#spot").addEventListener("click", e => {
