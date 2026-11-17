@@ -9,15 +9,19 @@
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const fmt = d => { try { return new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }); } catch { return d || ""; } };
+  const fmt = d => { if (!d) return ""; try { return new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }); } catch { return d || ""; } };
 
   let data;
   try { data = JSON.parse(localStorage.getItem(KEY)) || clone(DEFAULTS); } catch { data = clone(DEFAULTS); }
+  data.removedSeeds = data.removedSeeds || [];
+  const SEED = window.Y10_SEED || { achievements: [] };
+  const ids = a => a.studentIds || [a.studentId];
+  const allAch = () => SEED.achievements.filter(a => !data.removedSeeds.includes(a.id)).concat(data.achievements);
   data.messages = data.messages || []; data.shoutouts = data.shoutouts || []; data.achievements = data.achievements || [];
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {} };
   const nextId = arr => arr.reduce((m, x) => Math.max(m, x.id || 0), 0) + 1;
   const stu = id => data.students.find(s => s.id === id);
-  const who = id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "Unknown");
+  const whoA = a => ids(a).map(id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "Unknown")).join(", ");
 
   /* ---- login ---- */
   const show = ok => { $("#gate").hidden = ok; $("#dash").hidden = !ok; if (ok) renderAll(); };
@@ -42,14 +46,14 @@
   function renderAll() {
     let views = 0; try { views = +localStorage.getItem("year10-views") || 0; } catch {}
     $("#ovViews").textContent = views; $("#ovStu").textContent = data.students.length;
-    $("#ovAch").textContent = data.achievements.length; $("#ovShouts").textContent = data.shoutouts.length; $("#ovMsgs").textContent = data.messages.length;
+    $("#ovAch").textContent = allAch().length; $("#ovShouts").textContent = data.shoutouts.length; $("#ovMsgs").textContent = data.messages.length;
 
     $("#achWho").innerHTML = `<option value="0">Whole class</option>` + data.students.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
     $("#achCat").innerHTML = CATS.map(c => `<option>${c}</option>`).join("");
     $("#spotWho").innerHTML = data.students.map(s => `<option value="${s.id}">${esc(s.name)}</option>`).join("");
 
-    const ach = data.achievements.slice().sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-    $("#achList").innerHTML = ach.length ? ach.map(a => `<div class="item"><div><b>${esc(a.title)}</b><small>${esc(who(a.studentId))} · ${esc(a.cat)} · ${fmt(a.date)}</small>${a.desc ? `<p>${esc(a.desc)}</p>` : ""}</div><button data-del="ach" data-id="${a.id}">Delete</button></div>`).join("") : empty("No achievements yet. Add the first one above.");
+    const ach = allAch().sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    $("#achList").innerHTML = ach.length ? ach.map(a => `<div class="item"><div><b>${esc(a.title)}</b><small>${esc(whoA(a))} · ${esc(a.cat)}${a.date ? " · " + fmt(a.date) : ""}</small>${a.desc ? `<p>${esc(a.desc)}</p>` : ""}</div><button data-del="ach" data-id="${a.id}">Delete</button></div>`).join("") : empty("No achievements yet. Add the first one above.");
     $("#stuList").innerHTML = data.students.map(s => `<div class="item"><div><b>${esc(s.name)}</b>${s.dream ? `<small>Could be: ${esc(s.dream)}</small>` : ""}</div><button data-del="stu" data-id="${s.id}">Remove</button></div>`).join("");
     $("#msgList").innerHTML = data.messages.length ? data.messages.map((m, i) => `<div class="item"><div><b>${esc(m.subject)}</b><small>from ${esc(m.name)} · ${fmt(m.date)}</small><p>${esc(m.msg)}</p></div><button data-del="msg" data-id="${i}">Delete</button></div>`).reverse().join("") : empty("No messages yet.");
     $("#shoutList").innerHTML = data.shoutouts.length ? data.shoutouts.map((n, i) => `<div class="item"><div><b>To ${esc(n.to)}</b><small>from ${esc(n.from)}</small><p>${esc(n.msg)}</p></div><button data-del="shout" data-id="${i}">Delete</button></div>`).reverse().join("") : empty("No shout-outs yet.");
@@ -58,7 +62,9 @@
   /* ---- actions ---- */
   $("#achForm").addEventListener("submit", e => {
     e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
-    data.achievements.push({ id: nextId(data.achievements), studentId: +f.student, title: f.title.trim(), cat: f.cat, date: f.date, desc: f.desc.trim() });
+    const picked = [...$("#achWho").selectedOptions].map(o => +o.value);
+    if (!picked.length) { alert("Pick who this is for."); return; }
+    data.achievements.push({ id: Math.max(nextId(data.achievements), 2000), studentIds: picked.includes(0) ? [0] : picked, title: f.title.trim(), cat: f.cat, date: f.date, desc: f.desc.trim() });
     save(); e.target.reset(); renderAll();
   });
   $("#stuForm").addEventListener("submit", e => {
@@ -74,8 +80,8 @@
   $("#dash").addEventListener("click", e => {
     const b = e.target.closest("[data-del]"); if (!b) return;
     const id = +b.dataset.id, t = b.dataset.del;
-    if (t === "ach") data.achievements = data.achievements.filter(a => a.id !== id);
-    if (t === "stu") { if (!confirm("Remove this student and their achievements?")) return; data.students = data.students.filter(s => s.id !== id); data.achievements = data.achievements.filter(a => a.studentId !== id); if (data.spotlight?.studentId === id) data.spotlight = null; }
+    if (t === "ach") { if (id >= 1000 && id < 2000) data.removedSeeds.push(id); else data.achievements = data.achievements.filter(a => a.id !== id); }
+    if (t === "stu") { if (!confirm("Remove this student and their achievements?")) return; data.students = data.students.filter(s => s.id !== id); data.achievements = data.achievements.filter(a => !ids(a).includes(id)); if (data.spotlight?.studentId === id) data.spotlight = null; }
     if (t === "msg") data.messages.splice(id, 1);
     if (t === "shout") data.shoutouts.splice(id, 1);
     save(); renderAll();

@@ -17,6 +17,10 @@
   let data;
   try { data = JSON.parse(localStorage.getItem(KEY)) || clone(DEFAULTS); } catch { data = clone(DEFAULTS); }
   data.messages = data.messages || [];
+  data.removedSeeds = data.removedSeeds || [];
+  const SEED = window.Y10_SEED || { achievements: [], gallery: [] };
+  const allAch = () => SEED.achievements.filter(a => !data.removedSeeds.includes(a.id)).concat(data.achievements);
+  const ids = a => a.studentIds || [a.studentId];
   // Views on THIS device only (no backend): count once per browser session.
   try {
     const v = +localStorage.getItem("year10-views") || 0;
@@ -26,8 +30,8 @@
   const stu = id => data.students.find(s => s.id === id);
   const initials = n => n.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
   const tone = id => TONES[(id - 1) % TONES.length];
-  const who = id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "Class");
-  const fmt = d => { try { return new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }); } catch { return d; } };
+  const whoA = a => ids(a).map(id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "")).filter(Boolean).join(", ");
+  const fmt = d => { if (!d) return ""; try { return new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }); } catch { return d; } };
 
   // Random order, but Ali Y and Mashal are always kept well apart (never side by side or stacked).
   function apartShuffle() {
@@ -49,7 +53,7 @@
     const q = query.toLowerCase();
     const list = order.map(stu).filter(s => s && s.name.toLowerCase().includes(q));
     $("#people").innerHTML = list.map(s => {
-      const n = data.achievements.filter(a => a.studentId === s.id).length;
+      const n = allAch().filter(a => ids(a).includes(s.id)).length;
       return `<article class="card person" data-id="${s.id}" tabindex="0">
         <div class="avatar" style="--bg-a:${tone(s.id)}">${esc(initials(s.name))}</div>
         <h3>${esc(s.name)}</h3><div class="count">${n} achievement${n === 1 ? "" : "s"}</div></article>`;
@@ -62,11 +66,12 @@
   function renderAch() {
     const cats = ["All", ...CATS];
     $("#chips").innerHTML = cats.map(c => `<button class="chip ${c === filter ? "on" : ""}" data-c="${c}">${c}</button>`).join("");
-    const list = data.achievements.filter(a => filter === "All" || a.cat === filter).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    const list = allAch().filter(a => filter === "All" || a.cat === filter).sort((a, b) => (b.date || "").localeCompare(a.date || ""));
     $("#achGrid").innerHTML = list.length ? list.map(a => `
       <article class="card ach"><span class="tag">${esc(a.cat)}</span>
         <h3>${esc(a.title)}</h3>${a.desc ? `<p>${esc(a.desc)}</p>` : ""}
-        <div class="meta">${esc(who(a.studentId))} <span>· ${fmt(a.date)}</span></div></article>`).join("")
+        ${(a.images || []).length ? `<div class="shots">${a.images.map(src => `<img src="${esc(src)}" alt="${esc(a.title)}" loading="lazy" data-lb="${esc(src)}" data-cap="${esc(a.title)}">`).join("")}</div>` : ""}
+        <div class="meta">${esc(whoA(a))}${a.date ? ` <span>· ${fmt(a.date)}</span>` : ""}</div></article>`).join("")
       : `<div class="empty"><b>Be the first on the wall</b>Won something or did something as a class? Tell an admin and it goes up here.</div>`;
     reveal();
   }
@@ -85,7 +90,7 @@
       : `<div class="empty"><b>No shout-outs yet</b>Be the first to celebrate a classmate.</div>`;
   }
   function renderStats() {
-    const vals = { students: data.students.length, achievements: data.achievements.length, shoutouts: data.shoutouts.length };
+    const vals = { students: data.students.length, achievements: allAch().length, shoutouts: data.shoutouts.length };
     $$("[data-count]").forEach(el => {
       const target = vals[el.dataset.count]; let n = 0;
       (function step() { if (n >= target) return void (el.textContent = target); n += Math.max(1, Math.ceil(target / 30)); el.textContent = Math.min(n, target); requestAnimationFrame(step); })();
@@ -102,11 +107,11 @@
   const modal = $("#modal");
   function openStudent(id) {
     const s = stu(id); if (!s) return;
-    const mine = data.achievements.filter(a => a.studentId === id);
+    const mine = allAch().filter(a => ids(a).includes(id));
     $("#modalBody").innerHTML = `<div class="m-head"><div class="avatar" style="--bg-a:${tone(id)}">${esc(initials(s.name))}</div>
       <h3>${esc(s.name)}</h3>${s.dream ? `<div class="muted">Could be: ${esc(s.dream)}</div>` : ""}
       ${s.quote ? `<p class="m-quote">“${esc(s.quote)}”</p>` : ""}</div>
-      <div class="m-list">${mine.length ? mine.map(a => `<div><b>${esc(a.title)}</b><br><span class="muted">${esc(a.cat)} · ${fmt(a.date)}</span></div>`).join("") : `<div class="muted">No achievements yet. Their story is just starting.</div>`}</div>`;
+      <div class="m-list">${mine.length ? mine.map(a => `<div><b>${esc(a.title)}</b><br><span class="muted">${esc(a.cat)}${a.date ? " · " + fmt(a.date) : ""}</span></div>`).join("") : `<div class="muted">No achievements yet. Their story is just starting.</div>`}</div>`;
     modal.showModal();
   }
   $("#people").addEventListener("click", e => { const c = e.target.closest(".person"); if (c) openStudent(+c.dataset.id); });
@@ -136,6 +141,12 @@
     ci += del ? -1 : 1;
     setTimeout(type, del ? 40 : 90);
   })();
+
+  $("#gallery").innerHTML = (SEED.gallery || []).map(g => `<figure><img src="${esc(g.src)}" alt="${esc(g.caption)}" loading="lazy" data-lb="${esc(g.src)}" data-cap="${esc(g.caption)}"><figcaption>${esc(g.caption)}</figcaption></figure>`).join("") || `<div class="empty"><b>Photos coming soon</b></div>`;
+  const lb = $("#lightbox");
+  document.addEventListener("click", e => { const i = e.target.closest("[data-lb]"); if (i) { $("#lbImg").src = i.dataset.lb; $("#lbCap").textContent = i.dataset.cap || ""; lb.showModal(); } });
+  $("#closeLb").onclick = () => lb.close();
+  lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
 
   addEventListener("scroll", () => $("#nav").classList.toggle("scrolled", scrollY > 20), { passive: true });
   renderMarquee(); renderPeople(); renderHome(); renderAch(); renderSpot(); renderWall(); renderStats();

@@ -64,7 +64,7 @@
       <h2>Achievements</h2>
       <p class="muted">Add a win for one student or for the whole class.</p>
       <form id="achForm" class="formgrid">
-        <label>Who<select name="student" id="achWho" required></select></label>
+        <label>Who (hold Cmd or Ctrl to pick several)<select name="student" id="achWho" multiple size="6" required></select></label>
         <label>Type<select name="cat" id="achCat"></select></label>
         <label class="wide">Title<input name="title" placeholder="e.g. Won the inter-school quiz" required></label>
         <label>Date<input name="date" type="date" required></label>
@@ -119,6 +119,7 @@
   </main>
 </div>
 
+<script src="seed.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>

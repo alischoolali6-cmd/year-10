@@ -153,3 +153,15 @@ dialog h3{font-size:1.7rem}
   .big{white-space:normal}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card{opacity:1;transform:none}}
+
+/* photos */
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.shots img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:2px solid var(--line);cursor:zoom-in;transition:.25s}
+.shots img:hover{border-color:var(--ink);transform:scale(1.02)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.gallery figure{background:var(--card);border:2px solid var(--line);border-radius:var(--r);overflow:hidden}
+.gallery img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;cursor:zoom-in}
+.gallery figcaption{padding:12px 16px;font-size:.92rem;color:var(--muted);font-weight:500}
+#lightbox{width:min(560px,94vw);text-align:center}
+#lightbox img{width:100%;max-height:78vh;object-fit:contain;border-radius:14px}
+#lightbox p{margin-top:10px}

@@ -19,6 +19,7 @@
     <a href="#class">The Class</a>
     <a href="#home">Our Home</a>
     <a href="#achievements">Achievements</a>
+    <a href="#moments">Moments</a>
     <a href="#spotlight">Star</a>
     <a href="#wall">Shout-outs</a>
     <a class="navAdmin" href="admin.html">Admin</a>
@@ -84,8 +85,15 @@
     <div class="spot" id="spot"></div>
   </section>
 
+  <section id="moments" class="section">
+    <p class="kicker">04 · Moments</p>
+    <h2>Random Moments</h2>
+    <p class="sub">The everyday bits of Year 10 that never make a trophy cabinet.</p>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
   <section id="wall" class="section">
-    <p class="kicker">04 · Shout-outs</p>
+    <p class="kicker">05 · Shout-outs</p>
     <h2>Shout-out Wall</h2>
     <p class="sub">Celebrate a classmate. Say something kind.</p>
     <form id="shoutForm" class="shout-form">
@@ -98,7 +106,7 @@
   </section>
 
   <section id="message" class="section">
-    <p class="kicker">05 · Contact</p>
+    <p class="kicker">06 · Contact</p>
     <h2>Message the Class</h2>
     <p class="sub">An idea, a question or some news? Send it here. The class admins read these.</p>
     <form id="msgForm" class="shout-form">
@@ -116,8 +124,11 @@
   <a class="link" href="admin.html">Student login</a>
 </footer>
 
+<dialog id="lightbox"><img id="lbImg" alt=""><p id="lbCap" class="muted"></p><button class="close" id="closeLb" aria-label="Close">×</button></dialog>
+
 <dialog id="modal"><div id="modalBody"></div><button class="close" id="closeModal" aria-label="Close">×</button></dialog>
 
+<script src="seed.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
