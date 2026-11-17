@@ -3,41 +3,74 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Year 10 — The Class of Who We Could Be</title>
-<meta name="description" content="The Year 10 class website: our achievements, our people, our year, and who we could become.">
+<title>Year 10 — Who We Could Be</title>
+<meta name="description" content="The Year 10 class website: our people, our achievements, our home.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="stars" aria-hidden="true"></canvas>
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="floaters" id="floaters" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
-  <a href="#top" class="logo">Y<span>10</span></a>
+  <a href="#top" class="logo">Year<span>10</span></a>
   <nav>
-    <a href="#achievements">Achievements</a>
     <a href="#class">The Class</a>
-    <a href="#spotlight">Spotlight</a>
-    <a href="#year">Our Year</a>
+    <a href="#home">Our Home</a>
+    <a href="#achievements">Achievements</a>
+    <a href="#spotlight">Star</a>
     <a href="#wall">Shout-outs</a>
   </nav>
 </header>
 
 <main id="top">
   <section class="hero">
-    <p class="eyebrow">Year 10 · The only class with its own website</p>
-    <h1>We are Year 10.<br>We could be <span class="rotator" id="rotator">leaders</span><span class="caret">|</span></h1>
-    <p class="lead">This is our home on the internet: everything we have achieved, everyone who makes this class what it is, and the future we are building together.</p>
-    <div class="cta">
-      <a href="#achievements" class="btn primary">See our achievements</a>
-      <a href="#class" class="btn ghost">Meet the class</a>
+    <div class="shapes" aria-hidden="true"><span>🚀</span><span>⭐</span><span>🎨</span><span>💡</span><span>🏆</span></div>
+    <div class="badge10" aria-hidden="true">
+      <svg viewBox="0 0 200 200"><defs><path id="circ" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+        <circle cx="100" cy="100" r="98" fill="#ffd23f" stroke="#1d1b3a" stroke-width="5"/>
+        <text font-family="Space Grotesk" font-weight="700" font-size="17" fill="#1d1b3a" letter-spacing="3"><textPath href="#circ">YEAR 10 · BEST CLASS · YEAR 10 · BEST CLASS ·</textPath></text></svg>
+      <b>10</b>
     </div>
-    <div class="stats">
-      <div><b data-count="students">0</b><span>Students</span></div>
-      <div><b data-count="achievements">0</b><span>Achievements</span></div>
-      <div><b data-count="shoutouts">0</b><span>Shout-outs</span></div>
-      <div><b data-count="dreams">0</b><span>Dream careers</span></div>
+    <p class="eyebrow">The only class with its own website 🎉</p>
+    <h1 id="title" aria-label="Year 10"></h1>
+    <p class="big">We could be <span class="rotator" id="rotator">leaders</span><span class="caret">|</span></p>
+    <p class="lead">Our people. Our wins. Our home. Everything Year 10 is, and everything we are about to become.</p>
+    <div class="cta">
+      <a href="#class" class="btn pink">Meet the class</a>
+      <button class="btn blue" id="partyBtn">Throw confetti 🎊</button>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="track" id="marquee"></div></div>
+
+  <div class="stats">
+    <div class="st s1"><b data-count="students">0</b><span>Students</span></div>
+    <div class="st s2"><b data-count="achievements">0</b><span>Achievements</span></div>
+    <div class="st s3"><b data-count="shoutouts">0</b><span>Shout-outs</span></div>
+  </div>
+
+  <section id="class" class="section">
+    <h2>Meet the Class</h2>
+    <p class="sub">16 people. One class. Tap a card to see their page.</p>
+    <div class="row">
+      <button class="btn orange" id="shuffleBtn">🔀 Shuffle the class</button>
+      <input id="search" class="search" type="search" placeholder="Search a name…" aria-label="Search students">
+    </div>
+    <div class="grid people-grid" id="people"></div>
+  </section>
+
+  <section id="home" class="section">
+    <h2>Our Home</h2>
+    <p class="sub">Room 10 is where we live, laugh and learn. Everyone has a window here.</p>
+    <div class="house">
+      <div class="sun" aria-hidden="true"></div>
+      <div class="cloud c1" aria-hidden="true"></div><div class="cloud c2" aria-hidden="true"></div>
+      <div class="roof"><span>YEAR 10 HOUSE</span></div>
+      <div class="walls" id="windows"></div>
+      <div class="door-row"><div class="door"></div></div>
     </div>
   </section>
 
@@ -48,84 +81,69 @@
     <div class="grid ach-grid" id="achGrid"></div>
   </section>
 
-  <section id="class" class="section">
-    <h2>Meet the Class</h2>
-    <p class="sub">Click a card to see who they are and who they could become.</p>
-    <input id="search" class="search" type="search" placeholder="Search a name or dream…" aria-label="Search students">
-    <div class="grid people-grid" id="people"></div>
-  </section>
-
   <section id="spotlight" class="section">
     <div class="spot" id="spot"></div>
   </section>
 
-  <section id="goals" class="section">
-    <h2>Class Goals</h2>
-    <p class="sub">What we are aiming for this year, together.</p>
-    <div class="goals" id="goals-list"></div>
-  </section>
-
   <section id="year" class="section">
     <h2>Our Year</h2>
-    <p class="sub">The moments that shape Year 10.</p>
+    <p class="sub">The road to who we could be.</p>
     <ol class="timeline" id="timeline"></ol>
   </section>
 
   <section id="wall" class="section">
     <h2>Shout-out Wall</h2>
-    <p class="sub">Celebrate a classmate. Say something kind. It shows up here.</p>
+    <p class="sub">Celebrate a classmate. Say something kind.</p>
     <form id="shoutForm" class="shout-form">
-      <input name="from" placeholder="Your name" maxlength="30" required>
-      <input name="to" placeholder="Shout-out to…" maxlength="30" required>
+      <select name="from" id="fromSel" required></select>
+      <select name="to" id="toSel" required></select>
       <textarea name="msg" placeholder="Why they are awesome…" maxlength="160" required></textarea>
-      <button class="btn primary" type="submit">Post shout-out</button>
+      <button class="btn pink" type="submit">Post shout-out</button>
     </form>
     <div class="wall" id="wall-list"></div>
   </section>
 </main>
 
 <footer>
-  <p>Built by and for Year 10 · Who we could be starts now.</p>
+  <p>Built by and for Year 10 💛 Who we could be starts now.</p>
   <button class="link" id="adminBtn">Teacher login</button>
 </footer>
 
-<!-- Student modal -->
 <dialog id="modal"><div id="modalBody"></div><button class="close" id="closeModal" aria-label="Close">×</button></dialog>
 
-<!-- Admin panel -->
 <dialog id="admin">
   <h3>Teacher panel</h3>
-  <p class="muted">Changes save in this browser. Use Export to back up or move to another device.</p>
+  <p class="muted">Changes save in this browser. Use Export to back up.</p>
   <div class="tabs">
-    <button data-tab="a-student" class="on">Add student</button>
-    <button data-tab="a-ach">Add achievement</button>
-    <button data-tab="a-spot">Spotlight</button>
+    <button data-tab="a-ach" class="on">Add achievement</button>
+    <button data-tab="a-student">Add student</button>
+    <button data-tab="a-spot">Star of the month</button>
     <button data-tab="a-data">Data</button>
   </div>
-  <form id="a-student" class="tab on">
-    <input name="name" placeholder="Full name" required>
-    <input name="dream" placeholder="Dream career (e.g. Surgeon)" required>
-    <input name="quote" placeholder="Favourite quote / motto">
-    <input name="emoji" placeholder="Emoji (e.g. 🚀)" maxlength="4">
-    <button class="btn primary">Add student</button>
-  </form>
-  <form id="a-ach" class="tab">
+  <form id="a-ach" class="tab on">
     <select name="student" id="achStudent" required></select>
     <input name="title" placeholder="Achievement title" required>
     <select name="cat"><option>Academic</option><option>Sports</option><option>Arts</option><option>Leadership</option><option>Community</option></select>
     <input name="date" type="date" required>
     <textarea name="desc" placeholder="Short description"></textarea>
-    <button class="btn primary">Add achievement</button>
+    <button class="btn pink">Add achievement</button>
+  </form>
+  <form id="a-student" class="tab">
+    <input name="name" placeholder="Name" required>
+    <input name="dream" placeholder="Dream career (optional)">
+    <input name="quote" placeholder="Favourite quote / motto (optional)">
+    <input name="emoji" placeholder="Emoji (optional)" maxlength="4">
+    <button class="btn pink">Add student</button>
   </form>
   <form id="a-spot" class="tab">
     <select name="student" id="spotStudent" required></select>
-    <textarea name="why" placeholder="Why are they Student of the Month?" required></textarea>
-    <button class="btn primary">Set spotlight</button>
+    <textarea name="why" placeholder="Why are they Star of the Month?" required></textarea>
+    <button class="btn pink">Set star</button>
   </form>
   <div id="a-data" class="tab">
-    <button class="btn ghost" id="exportBtn">Export data</button>
-    <button class="btn ghost" id="importBtn">Import data</button>
-    <button class="btn ghost danger" id="resetBtn">Reset to sample data</button>
+    <button class="btn blue" id="exportBtn">Export data</button>
+    <button class="btn blue" id="importBtn">Import data</button>
+    <button class="btn orange" id="resetBtn">Reset everything</button>
     <hr>
     <h4>Remove items</h4>
     <div id="manage"></div>
