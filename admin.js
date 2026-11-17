@@ -21,7 +21,7 @@
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {} };
   const nextId = arr => arr.reduce((m, x) => Math.max(m, x.id || 0), 0) + 1;
   const stu = id => data.students.find(s => s.id === id);
-  const whoA = a => ids(a).map(id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "Unknown")).join(", ");
+  const whoA = a => a.who || ids(a).map(id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "Unknown")).join(", ");
 
   /* ---- login ---- */
   const show = ok => { $("#gate").hidden = ok; $("#dash").hidden = !ok; if (ok) renderAll(); };

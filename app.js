@@ -30,7 +30,7 @@
   const stu = id => data.students.find(s => s.id === id);
   const initials = n => n.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
   const tone = id => TONES[(id - 1) % TONES.length];
-  const whoA = a => ids(a).map(id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "")).filter(Boolean).join(", ");
+  const whoA = a => a.who || ids(a).map(id => id === 0 ? "Whole class" : (stu(id) ? stu(id).name : "")).filter(Boolean).join(", ");
   const fmt = d => { if (!d) return ""; try { return new Date(d).toLocaleDateString("en-GB", { day:"numeric", month:"short", year:"numeric" }); } catch { return d; } };
 
   // Random order, but Ali Y and Mashal are always kept well apart (never side by side or stacked).
