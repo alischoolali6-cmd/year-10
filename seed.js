@@ -6,7 +6,7 @@ window.Y10_SEED = {
       id: 1001, studentIds: [0], cat: "Community", date: "2026-11-04",
       title: "Think Pink Day: more than 240 BD raised for charity",
       desc: "Year 10 came together for breast cancer awareness and raised more than 240 BD for Think Pink Bahrain. The school recognised the Year 10 Senior School Entrepreneurs for raising the highest amount.",
-      images: ["images/think-pink-1.jpg", "images/think-pink-3.jpg"]
+      images: ["images/think-pink-3.jpg"]
     },
     {
       id: 1002, studentIds: [0], cat: "Sports", date: "",
